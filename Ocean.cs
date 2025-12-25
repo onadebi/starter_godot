@@ -3,35 +3,33 @@ using System.Diagnostics;
 
 public partial class Ocean : Node2D
 {
-	private Sprite2D _planeSprite;
+	[Export]private Sprite2D _onaxPlaneSprite;
 	private Stopwatch sw = new();
 	private int frameCount = 0;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		GD.Print($"Ocean started. Running on Godot {Engine.GetVersionInfo()}. Frame rate {Engine.GetFramesPerSecond()} FPS");
-		_planeSprite = GetNode<Sprite2D>("Plane"); // Nested node path
-
 		// Position of Plane
-		GD.Print($"Plane position: {_planeSprite.Position}");
-		GD.Print($"Plane Global position: {_planeSprite.GlobalPosition}");
+		GD.Print($"Plane position: {_onaxPlaneSprite.Position}");
+		GD.Print($"Plane Global position: {_onaxPlaneSprite.GlobalPosition}");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		// Move the plane (frame-rate independent)
-		if (_planeSprite.GlobalPosition.X <= 870)
+		if (_onaxPlaneSprite.GlobalPosition.X <= 870)
 		{
-			float speedVel = _planeSprite.GlobalPosition.X <= 800 
-			? (_planeSprite.GlobalPosition.X <= 600 ? 100f : 70f) 
+			float speedVel = _onaxPlaneSprite.GlobalPosition.X <= 800 
+			? (_onaxPlaneSprite.GlobalPosition.X <= 600 ? 100f : 70f) 
 			: 40f;
-			_planeSprite.Position += new Vector2(speedVel * (float)delta, 0);
+			_onaxPlaneSprite.Position += new Vector2(speedVel * (float)delta, 0);
 		}
-		if (_planeSprite.GlobalPosition.X >= 870 && _planeSprite.RotationDegrees < 45f)
+		if (_onaxPlaneSprite.GlobalPosition.X >= 870 && _onaxPlaneSprite.RotationDegrees < 45f)
 		{
 			float rotateSpeed = 20f; // degrees per second (lower is slower and smoother)
-			_planeSprite.RotationDegrees = Mathf.MoveToward(_planeSprite.RotationDegrees, 45f, rotateSpeed * (float)delta);
+			_onaxPlaneSprite.RotationDegrees = Mathf.MoveToward(_onaxPlaneSprite.RotationDegrees, 45f, rotateSpeed * (float)delta);
 		}
 
 		frameCount++;
