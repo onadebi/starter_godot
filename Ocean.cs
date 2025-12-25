@@ -21,12 +21,18 @@ public partial class Ocean : Node2D
 	public override void _Process(double delta)
 	{
 		// Move the plane (frame-rate independent)
-		if(_planeSprite.GlobalPosition.X <= 870)
-			_planeSprite.Position += new Vector2(100f * (float)delta, 0);
-			// Smoothly ease rotation toward 45° when past X>=870 (and back to 0° otherwise)
-			float targetDeg = _planeSprite.GlobalPosition.X >= 868 ? 45f : 0f;
+		if (_planeSprite.GlobalPosition.X <= 870)
+		{
+			float speedVel = _planeSprite.GlobalPosition.X <= 800 
+			? (_planeSprite.GlobalPosition.X <= 600 ? 100f : 70f) 
+			: 40f;
+			_planeSprite.Position += new Vector2(speedVel * (float)delta, 0);
+		}
+		if (_planeSprite.GlobalPosition.X >= 870 && _planeSprite.RotationDegrees < 45f)
+		{
 			float rotateSpeed = 20f; // degrees per second (lower is slower and smoother)
-			_planeSprite.RotationDegrees = Mathf.MoveToward(_planeSprite.RotationDegrees, targetDeg, rotateSpeed * (float)delta);
+			_planeSprite.RotationDegrees = Mathf.MoveToward(_planeSprite.RotationDegrees, 45f, rotateSpeed * (float)delta);
+		}
 
 		frameCount++;
 
@@ -39,7 +45,7 @@ public partial class Ocean : Node2D
 		{
 			sw.Stop();
 			GD.Print($"Delta: {delta} s, FPS: {Engine.GetFramesPerSecond()}");
-			GD.Print($"Total time for 60 frames: {sw.Elapsed.TotalMilliseconds} ms — avg {sw.Elapsed.TotalMilliseconds/60.0} ms/frame");
+			GD.Print($"Total time for 60 frames: {sw.Elapsed.TotalMilliseconds} ms — avg {sw.Elapsed.TotalMilliseconds / 60.0} ms/frame");
 			sw.Reset();
 		}
 	}
